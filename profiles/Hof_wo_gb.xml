@@ -1,0 +1,138 @@
+<HBProfile>
+	<Name>HoF_LFR</Name>
+	<MinLevel>90</MinLevel>
+	<MaxLevel>555</MaxLevel>
+   	<MinDurability>0.2</MinDurability>
+	<MinFreeBagSlots>3</MinFreeBagSlots>
+   	<MailGrey>false</MailGrey>
+	<MailWhite>false</MailWhite>
+	<MailGreen>false</MailGreen>
+	<MailBlue>false</MailBlue>
+	<MailPurple>false</MailPurple>
+	<SellGrey>true</SellGrey>
+	<SellWhite>true</SellWhite>
+	<SellGreen>true</SellGreen>
+	<SellBlue>true</SellBlue>
+	<SellPurple>true</SellPurple>
+   
+	<ProtectedItems>
+		<Item Id="93351" Name="Зелье удачи"/>
+		<Item Id="88567" Name="Ghost Iron Lockbox"/>
+	</ProtectedItems>
+	
+	<AvoidMobs>
+		<Mob Name="Imperial Vizier Zor'lok" Entry="62980" />
+	</AvoidMobs>
+
+	<Vendors>
+		<Vendor Name="Tan Shin Tiao" Entry="64605" Type="Repair" X="1453" Y="398" Z="548" />
+   	</Vendors>
+ 
+	<QuestOrder>
+		<If Condition="!HasItem(93351)" >
+			<CustomBehavior File="UserDialog" Title="Warning" Text="Поты кончились! Затарь парня, пусть горбатит дальше"  />
+		</If>
+		
+	<CustomBehavior File="Hooks\DoWhen" ActivityName="CustomDeathHook" TreeHookName="Death_Main" AllowUseDuringCombat="True" AllowExecutionWhileNotAlive="True"  UseWhen="Me.IsGhost &amp;&amp; Me.CorpseMapId != Me.MapId" >
+		<CustomBehavior File="Misc\RunLua" Lua="RepopMe();" />	
+		<CustomBehavior File="WaitTimer" WaitTime="50000" TerminateWhen="!Me.IsInInstance" /> 
+    		<MoveTo X="161.925" Y="3964.007" Z="231.205" TerminateWhen="Me.IsDead"/>
+		<MoveTo X="165.0598" Y="4041.943" Z="255.9124" TerminateWhen="Me.IsDead"/>
+		<CustomBehavior File="GoThruPortal" X="165.8269" Y="4057.889" Z="255.9089" TerminateWhen="Me.IsDead"/>
+		<CustomBehavior File="WaitTimer" WaitTime="10000" TerminateWhen="Me.IsInInstance" />
+	</CustomBehavior>
+	
+   		<CustomBehavior File="Hooks\DoWhen" ItemId="93351" UseWhen="!Me.HasAura(135855) &amp;&amp; HasItem(93351)" AllowUseDuringCombat="true" /> <!-- Potion of Luck -->
+		
+		<If Condition="!(Me.ZoneId == 1009)" > <!-- Сундуки -->
+			<CustomBehavior File="Hooks\DoWhen" ActivityName="Open_PChests" UseWhen="HasItem(87391)" AllowUseDuringCombat="true" > <!-- Plundered Treasure Chest -->
+				<CustomBehavior File="RunCode" Code="Logging.Write(System.Windows.Media.Colors.DeepSkyBlue, &quot;Opening Plundered Treasure Chest.&quot;);" />
+				<CustomBehavior File="UseItem" ItemId="87391" NumOfTimes="10" TerminateWhen="!HasItem(87391)" />
+			</CustomBehavior>
+		</If>
+   
+		<CustomBehavior File="RunMacro" Macro="/script LeaveParty()" />
+   
+   <While Condition="true">
+			<If Condition="!(Me.MapId == 1009)" >
+			
+		<If Condition="Me.FreeBagSlots &lt;= 25" >
+			<CustomBehavior File="Message" Text="Getting low on bagspace, moving to sell" />
+			<CustomBehavior File="ForceSetVendor" DoMail="False"  DoRepair="True" DoSell="True" DoTrain="False" />
+		</If>
+	
+				
+			
+			
+			
+			
+				
+				<CustomBehavior File="InteractWith"   IgnoreCombat="False" IgnoreLoSToTarget="False" MobState="AliveNotInCombat" MobId="80633" X="1432.099" Y="374.4358" Z="548.0796"/> <!-- подойти к мобу -->
+				<CustomBehavior File="RunMacro" Macro="/run SelectGossipOption(3)"/> <!-- выбор диалога -->
+				<CustomBehavior File="WaitTimer" WaitTime="5000" />	<!-- ждем "прок" -->
+				<CustomBehavior File="RunMacro" Macro="/click LFGDungeonReadyDialogEnterDungeonButton" TerminateWhen="Me.MapId == 1009"/> <!-- принимаем инвайт в лфр (переносимся в инст) -->
+		
+		
+
+			</If>
+			<If Condition="(Me.MapId == 1009)" > <!-- старт фарма! -->		
+				<CustomBehavior File="UserSettings" LootMobs="True" PullDistance="40" />
+					<CustomBehavior File="RunMacro" Macro="/threshold 4" />
+					<CustomBehavior File="Misc\InstanceTimer" Timer="Start" />
+					<DisableBehavior Name="Combat" /> <!-- отключаем комбат -->
+						<runto X="-2282.651" Y="460.2161" Z="422.342" /> <!-- первый пак -->
+						<runto X="-2279.465" Y="478.2867" Z="422.342" /> <!-- второй пак -->
+		
+							<If Condition="(Me.Class == WoWClass.Monk)" > 
+							<CustomBehavior File="InteractWith"  IgnoreCombat="True" IgnoreLoSToTarget="true" MobState="Alive" MobId="63853" InteractByCastingSpellId="115180" /> <!-- пулл 3го пака -->
+							</If>
+					<EnableBehavior Name="Combat" /> <!-- включаем комбат -->
+	
+						<runto X="-2242.414" Y="462.4237" Z="422.3418" /> <!-- выходим на центр -->
+						
+					<DisableBehavior Name="Combat" /> <!-- отключаем комбат -->
+						
+							
+							<If Condition="(Me.Class == WoWClass.Monk)" > 
+							<CustomBehavior File="InteractWith"   IgnoreCombat="True" IgnoreLoSToTarget="True" MobState="AliveNotInCombat" MobId="63853" InteractByCastingSpellId="115180" /> <!-- пулл пака мелких -->
+							</If>
+						<runto X="-2252.346" Y="431.854" Z="422.3408" /> <!-- контрольная точка -->
+						<runto X="-2253.727" Y="323.4565" Z="422.8622"/> <!-- вышли на балкон с 3мя паками (2 мелких и 1 большой) -->
+					<EnableBehavior Name="Combat" /> <!-- включаем комбат -->
+	
+						<runto X="-2252.727" Y="323.4565" Z="422.8622"/>						<!-- лестница -->
+					<DisableBehavior Name="Combat" /> <!-- отключаем комбат -->
+							<If Condition="(Me.Class == WoWClass.Monk)" > 
+							<CustomBehavior File="InteractWith"   IgnoreCombat="True" IgnoreLoSToTarget="True" MobState="AliveNotInCombat" MobId="63853" X="-2211.503" Y="287.8837" Z="422.9453" InteractByCastingSpellId="117952" /> <!-- пулл пака мелких на балконе (проверить нужны ли координаты!!!!!) -->
+							</If>
+						<runto X="-2258.062" Y="276.788" Z="406.3812" /> <!-- идем к паку в центре комнаты -->
+					<EnableBehavior Name="Combat" /> <!-- включаем комбат -->
+					
+					<runto X="-2285.211" Y="268.9804" Z="406.3812" />
+					
+					<DisableBehavior Name="Combat" /> <!-- отключаем комбат -->
+							<If Condition="(Me.Class == WoWClass.Monk)" > 
+							<CustomBehavior File="InteractWith"   IgnoreCombat="True" IgnoreLoSToTarget="True" MobState="AliveNotInCombat" MobId="66181" X="-2307.807" Y="292.0417" Z="409.9798" InteractByCastingSpellId="115180" /> <!-- пулл пака мелких на площадке -->
+							</If>
+						<MoveTo X="-2244.851" Y="225.0041" Z="409.8971" />
+							
+					<EnableBehavior Name="Combat" /> <!-- включаем комбат -->
+	
+					<CustomBehavior File="Misc\InstanceTimer" Timer="Check" WaitTime="369000" />
+				<CustomBehavior File="RunMacro" Macro="/script LeaveParty()" IgnoreCombat="False" />
+			</If>
+			
+			
+			
+			
+			
+		
+   
+  
+		
+		
+		
+   </While>
+   </QuestOrder>
+   
+   </HBProfile>
