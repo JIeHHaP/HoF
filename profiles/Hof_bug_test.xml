@@ -19,11 +19,29 @@
 		<Item Id="93351" Name="Зелье удачи"/>
 		<Item Id="88567" Name="Ghost Iron Lockbox"/>
 	</ProtectedItems>
+	
+	<AvoidMobs>
+		<Mob Name="Imperial Vizier Zor'lok" Entry="62980" />
+	</AvoidMobs>
+
+	<Vendors>
+		<Vendor Name="Tan Shin Tiao" Entry="64605" Type="Repair" X="1453" Y="398" Z="548" />
+   	</Vendors>
  
 	<QuestOrder>
 		<If Condition="!HasItem(93351)" >
 			<CustomBehavior File="UserDialog" Title="Warning" Text="Поты кончились! Затарь парня, пусть горбатит дальше"  />
 		</If>
+		
+	<CustomBehavior File="Hooks\DoWhen" ActivityName="CustomDeathHook" TreeHookName="Death_Main" AllowUseDuringCombat="True" AllowExecutionWhileNotAlive="True"  UseWhen="Me.IsGhost &amp;&amp; Me.CorpseMapId != Me.MapId" >
+		<CustomBehavior File="Misc\RunLua" Lua="RepopMe();" />	
+		<CustomBehavior File="WaitTimer" WaitTime="50000" TerminateWhen="!Me.IsInInstance" /> 
+    		<MoveTo X="161.925" Y="3964.007" Z="231.205" TerminateWhen="Me.IsDead"/>
+		<MoveTo X="165.0598" Y="4041.943" Z="255.9124" TerminateWhen="Me.IsDead"/>
+		<CustomBehavior File="GoThruPortal" X="165.8269" Y="4057.889" Z="255.9089" TerminateWhen="Me.IsDead"/>
+		<CustomBehavior File="WaitTimer" WaitTime="10000" TerminateWhen="Me.IsInInstance" />
+	</CustomBehavior>
+	
    		<CustomBehavior File="Hooks\DoWhen" ItemId="93351" UseWhen="!Me.HasAura(135855) &amp;&amp; HasItem(93351)" AllowUseDuringCombat="true" /> <!-- Potion of Luck -->
 		
 		<If Condition="!(Me.ZoneId == 1009)" > <!-- Сундуки -->
@@ -37,6 +55,12 @@
    
    <While Condition="true">
 			<If Condition="!(Me.MapId == 1009)" >
+			
+		<If Condition="Me.FreeBagSlots &lt;= 25" >
+			<CustomBehavior File="Message" Text="Getting low on bagspace, moving to sell" />
+			<CustomBehavior File="ForceSetVendor" DoMail="False"  DoRepair="True" DoSell="True" DoTrain="False" />
+		</If>
+	
 				<If Condition="!(WoWSpell.FromId(83958).Cooldown)"> <!-- юз гб 206602 -->
 					<CustomBehavior File="Misc\RunLua" Lua="CastSpellByID(83958);" />
 					<CustomBehavior File="WaitTimer" WaitTime="3500" /> 
@@ -85,7 +109,7 @@
 			
 			
 			
-				<runto X="1430.36" Y="376.1352" Z="548.0797" />	
+				
 				<CustomBehavior File="InteractWith"   IgnoreCombat="False" IgnoreLoSToTarget="False" MobState="AliveNotInCombat" MobId="80633" X="1432.099" Y="374.4358" Z="548.0796"/> <!-- подойти к мобу -->
 				<CustomBehavior File="RunMacro" Macro="/run SelectGossipOption(3)"/> <!-- выбор диалога -->
 				<CustomBehavior File="WaitTimer" WaitTime="5000" />	<!-- ждем "прок" -->
@@ -133,10 +157,8 @@
 							<If Condition="(Me.Class == WoWClass.Monk)" > 
 							<CustomBehavior File="InteractWith"   IgnoreCombat="True" IgnoreLoSToTarget="True" MobState="AliveNotInCombat" MobId="66181" X="-2307.807" Y="292.0417" Z="409.9798" InteractByCastingSpellId="115180" /> <!-- пулл пака мелких на площадке -->
 							</If>
-						<runto X="-2265.632" Y="248.8482" Z="406.3812" />
-							<If Condition="(Me.Class == WoWClass.Monk)" > 
-							<CustomBehavior File="InteractWith"   IgnoreCombat="True" IgnoreLoSToTarget="True" MobState="AliveNotInCombat" MobId="66181" X="-2307.807" Y="292.0417" Z="409.9798" InteractByCastingSpellId="115180" /> <!-- пулл 2го пака мелких на площадке -->
-							</If>
+						<MoveTo X="-2244.851" Y="225.0041" Z="409.8971" />
+							
 					<EnableBehavior Name="Combat" /> <!-- включаем комбат -->
 	
 					<CustomBehavior File="Misc\InstanceTimer" Timer="Check" WaitTime="369000" />
