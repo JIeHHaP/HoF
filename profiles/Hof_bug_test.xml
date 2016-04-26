@@ -49,6 +49,10 @@
 				<CustomBehavior File="RunCode" Code="Logging.Write(System.Windows.Media.Colors.DeepSkyBlue, &quot;Opening Plundered Treasure Chest.&quot;);" />
 				<CustomBehavior File="UseItem" ItemId="87391" NumOfTimes="10" TerminateWhen="!HasItem(87391)" />
 			</CustomBehavior>
+			<CustomBehavior File="Hooks\DoWhen" ActivityName="conver_harmony" UseWhen="GetItemCount(89112) &gt;= 10" AllowUseDuringCombat="true" > <!-- Hormony -->
+				<CustomBehavior File="RunCode" Code="Logging.Write(System.Windows.Media.Colors.DeepSkyBlue, &quot;conver_harmony&quot;);" />
+				<CustomBehavior File="UseItem" ItemId="89112" TerminateWhen="!HasItem(89112)" />
+			</CustomBehavior>
 		</If>
    
 		<CustomBehavior File="RunMacro" Macro="/script LeaveParty()" />
@@ -71,7 +75,7 @@
 						<CustomBehavior File="InteractWith" MobId="206603" WaitForNpcs="false" ObjectType="GameObject" Range="10" WaitTime="2000" /> 
 					</If> 
 					<!-- взять зелье удачи -->
-					<IF Condition="GetItemCount(111351) &lt;= 1" >
+					<IF Condition="GetItemCount(93351) &lt;= 1" >
 						<CustomBehavior File="RunMacro" Macro="/run for s=1,98 do local t=GetGuildBankItemLink(6,s) if t and strfind(t,'Зелье удачи') then  SetCurrentGuildBankTab(6)AutoStoreGuildBankItem(6,s) break end  end"/>
 						<CustomBehavior File="WaitTimer" WaitTime="1000"/>
 					</IF>
@@ -98,8 +102,8 @@
 						<CustomBehavior File="RunMacro" Macro="/run for b=0,4 do for s=1,GetContainerNumSlots(b)do local n=GetContainerItemLink(b,s)if n and strfind(n,'Черная триллиевая руда')then print('Depositing '..n)UseContainerItem(b,s)end end end"/>
 						<CustomBehavior File="WaitTimer" WaitTime="1000"/>
 					</While>
-					<While Condition="HasItem(89112)" > <!-- проверка на наличие гармонии -->
-						<CustomBehavior File="RunMacro" Macro="/run for b=0,4 do for s=1,GetContainerNumSlots(b)do local n=GetContainerItemLink(b,s)if n and strfind(n,'Частица гармонии')then print('Depositing '..n)UseContainerItem(b,s)end end end"/>
+					<While Condition="HasItem(76061)" > <!-- проверка на наличие гармонии -->
+						<CustomBehavior File="RunMacro" Macro="/run for b=0,4 do for s=1,GetContainerNumSlots(b)do local n=GetContainerItemLink(b,s)if n and strfind(n,'Дух гармонии')then print('Depositing '..n)UseContainerItem(b,s)end end end"/>
 						<CustomBehavior File="WaitTimer" WaitTime="1000"/>
 					</While>
 					<While Condition="HasItem(72988)" > <!-- проверка на наличие ткани -->
