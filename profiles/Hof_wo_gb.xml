@@ -49,6 +49,10 @@
 				<CustomBehavior File="RunCode" Code="Logging.Write(System.Windows.Media.Colors.DeepSkyBlue, &quot;Opening Plundered Treasure Chest.&quot;);" />
 				<CustomBehavior File="UseItem" ItemId="87391" NumOfTimes="10" TerminateWhen="!HasItem(87391)" />
 			</CustomBehavior>
+			<CustomBehavior File="Hooks\DoWhen" ActivityName="conver_harmony" UseWhen="GetItemCount(89112) &gt;= 10" AllowUseDuringCombat="true" > <!-- Hormony -->
+				<CustomBehavior File="RunCode" Code="Logging.Write(System.Windows.Media.Colors.DeepSkyBlue, &quot;conver_harmony&quot;);" />
+				<CustomBehavior File="UseItem" ItemId="89112" TerminateWhen="!HasItem(89112)" />
+			</CustomBehavior>
 		</If>
    
 		<CustomBehavior File="RunMacro" Macro="/script LeaveParty()" />
@@ -61,11 +65,7 @@
 			<CustomBehavior File="ForceSetVendor" DoMail="False"  DoRepair="True" DoSell="True" DoTrain="False" />
 		</If>
 	
-				
-			
-			
-			
-			
+						
 				
 				<CustomBehavior File="InteractWith"   IgnoreCombat="False" IgnoreLoSToTarget="False" MobState="AliveNotInCombat" MobId="80633" X="1432.099" Y="374.4358" Z="548.0796"/> <!-- подойти к мобу -->
 				<CustomBehavior File="RunMacro" Macro="/run SelectGossipOption(3)"/> <!-- выбор диалога -->
